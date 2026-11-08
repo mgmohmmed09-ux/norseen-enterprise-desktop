@@ -14,7 +14,9 @@ import {
   CalendarDays,
   Briefcase,
   Truck,
+  MessageSquareText,
 } from 'lucide-react';
+import { useChat } from '../../context/ChatContext';
 
 export type NavigationTab = 
   | 'dashboard'
@@ -45,6 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
     scopedTransfers,
     catalogItems,
   } = useApp();
+  const { toggleChat, unreadCount } = useChat();
 
   // Pending requests count badge
   const pendingRequestsCount = scopedRequests.filter(r => r.status === 'pending').length;
@@ -238,6 +241,33 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
               </button>
             );
           })}
+      </div>
+ 
+      {/* Quick Internal Chat Launcher in Sidebar */}
+      <div className="pt-3 mt-4 border-t border-cyan-500/15">
+        <button
+          type="button"
+          onClick={toggleChat}
+          className="w-full flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-cyan-950/80 to-teal-950/80 hover:from-cyan-900/90 hover:to-teal-900/90 border border-cyan-500/30 text-white transition shadow-lg cursor-pointer group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-cyan-600/30 text-cyan-300 border border-cyan-400/40 flex items-center justify-center group-hover:scale-105 transition">
+              <MessageSquareText className="w-4 h-4" />
+            </div>
+            <div className="text-right">
+              <div className="text-xs font-black text-white flex items-center gap-1.5">
+                <span>الدردشة الداخلية</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              </div>
+              <div className="text-[10px] text-cyan-300/70">تواصل مباشر بين الفروع</div>
+            </div>
+          </div>
+          {unreadCount > 0 && (
+            <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold shadow-md animate-bounce">
+              {unreadCount}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Corporate Info Footer */}

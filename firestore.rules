@@ -114,6 +114,12 @@ service cloud.firestore {
       allow write: if isValidId(transferId);
     }
 
+    // Enterprise Team Chat Messages
+    match /chatMessages/{messageId} {
+      allow read: if true;
+      allow write: if isValidId(messageId);
+    }
+
     // Default deny all other paths
     match /{document=**} {
       allow read, write: if false;

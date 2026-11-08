@@ -22,6 +22,8 @@ import { CasualLaborRegistry } from './components/casual/CasualLaborRegistry';
 import { BranchTransfersScreen } from './components/logistics/BranchTransfersScreen';
 import { QuranRadioProvider } from './context/QuranRadioContext';
 import { QuranRadioMiniBar } from './components/common/QuranRadioMiniBar';
+import { ChatProvider } from './context/ChatContext';
+import { SideChatDrawer } from './components/chat/SideChatDrawer';
 import { Building2 } from 'lucide-react';
 
 const MainLayout: React.FC = () => {
@@ -157,6 +159,9 @@ const MainLayout: React.FC = () => {
         onGoToDashboard={() => setCurrentTab('dashboard')}
       />
 
+      {/* Enterprise Real-time Side Chat Drawer */}
+      <SideChatDrawer />
+
     </div>
   );
 };
@@ -165,7 +170,9 @@ export default function App() {
   return (
     <AppProvider>
       <QuranRadioProvider>
-        <MainLayout />
+        <ChatProvider>
+          <MainLayout />
+        </ChatProvider>
       </QuranRadioProvider>
     </AppProvider>
   );
