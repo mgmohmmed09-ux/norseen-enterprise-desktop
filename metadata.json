@@ -1,0 +1,8 @@
+{
+  "name": "Norseen Enterprise Management System",
+  "description": "نظام إدارة مؤسسي شامل لنورسين (NOOR F&B) لإدارة الموظفين والفروع، المخزون والمشتريات، متابعة الغياب والتأخير، الطلبات والمهام.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,289 @@
+{
+  "entities": {
+    "Employee": {
+      "title": "Employee",
+      "description": "Employee record in Norseen Management System",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique employee document ID", "maxLength": 128 },
+        "nameAr": { "type": "string", "description": "Full employee name in Arabic", "maxLength": 128 },
+        "jobId": { "type": "string", "description": "Unique corporate employee code", "maxLength": 64 },
+        "nationalId": { "type": "string", "description": "National identification number", "maxLength": 32 },
+        "startDate": { "type": "string", "description": "Employment start date", "maxLength": 32 },
+        "vacationBalance": { "type": "number", "description": "Remaining paid vacation balance in days" },
+        "branchId": { "type": "string", "description": "Primary branch ID", "maxLength": 128 },
+        "shift": { "type": "string", "description": "Assigned shift type", "enum": ["morning", "evening", "full_time"], "maxLength": 32 },
+        "statusId": { "type": "string", "description": "Employment status ID", "maxLength": 64 },
+        "phone": { "type": "string", "description": "Contact phone number", "maxLength": 32 },
+        "email": { "type": "string", "description": "Corporate or personal email", "maxLength": 128 },
+        "notes": { "type": "string", "description": "Administrative notes", "maxLength": 500 },
+        "createdAt": { "type": "string", "description": "Creation timestamp", "maxLength": 64 }
+      },
+      "required": ["nameAr", "jobId", "nationalId", "branchId", "shift", "statusId"]
+    },
+    "Branch": {
+      "title": "Branch",
+      "description": "Company branch record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique branch identifier", "maxLength": 128 },
+        "code": { "type": "string", "description": "Branch code", "maxLength": 32 },
+        "nameAr": { "type": "string", "description": "Branch name in Arabic", "maxLength": 128 },
+        "cityAr": { "type": "string", "description": "City where branch is located", "maxLength": 64 },
+        "addressAr": { "type": "string", "description": "Detailed street address", "maxLength": 256 },
+        "phone": { "type": "string", "description": "Branch telephone number", "maxLength": 32 },
+        "isActive": { "type": "boolean", "description": "Active operational status" },
+        "managerName": { "type": "string", "description": "Current branch manager name", "maxLength": 128 }
+      },
+      "required": ["code", "nameAr", "cityAr"]
+    },
+    "Shift": {
+      "title": "Shift",
+      "description": "Work shift timing configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Shift identifier", "maxLength": 64 },
+        "nameAr": { "type": "string", "description": "Shift title in Arabic", "maxLength": 128 },
+        "startTime": { "type": "string", "description": "Shift start time (HH:mm)", "maxLength": 16 },
+        "endTime": { "type": "string", "description": "Shift end time (HH:mm)", "maxLength": 16 },
+        "gracePeriodMinutes": { "type": "number", "description": "Grace period in minutes before counting as delay" },
+        "descriptionAr": { "type": "string", "description": "Shift description", "maxLength": 256 }
+      },
+      "required": ["id", "nameAr", "startTime", "endTime"]
+    },
+    "EmploymentStatus": {
+      "title": "EmploymentStatus",
+      "description": "Employment status classification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Status code identifier", "maxLength": 64 },
+        "nameAr": { "type": "string", "description": "Arabic label", "maxLength": 128 },
+        "color": { "type": "string", "description": "Badge CSS color classes", "maxLength": 128 },
+        "isSystem": { "type": "boolean", "description": "Whether system default" },
+        "isActive": { "type": "boolean", "description": "Active in pickers" }
+      },
+      "required": ["id", "nameAr"]
+    },
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "System access user account",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique user account ID", "maxLength": 128 },
+        "username": { "type": "string", "description": "Login username or employee ID", "maxLength": 128 },
+        "fullNameAr": { "type": "string", "description": "User display name in Arabic", "maxLength": 128 },
+        "password": { "type": "string", "description": "Account password", "maxLength": 128 },
+        "role": { "type": "string", "description": "Primary RBAC group", "maxLength": 64 },
+        "employeeId": { "type": "string", "description": "Linked employee registry ID", "maxLength": 128 },
+        "assignedBranchIds": { "type": "string", "description": "JSON array string or comma list of allowed branch IDs", "maxLength": 512 },
+        "isActive": { "type": "boolean", "description": "Account active status" },
+        "lastLogin": { "type": "string", "description": "Last sign-in timestamp", "maxLength": 64 },
+        "avatarUrl": { "type": "string", "description": "User profile picture", "maxLength": 500000 },
+        "email": { "type": "string", "description": "Linked email for notifications", "maxLength": 128 },
+        "emailNotificationsEnabled": { "type": "boolean", "description": "Enable email notification alerts" }
+      },
+      "required": ["username", "role"]
+    },
+    "IncidentRecord": {
+      "title": "IncidentRecord",
+      "description": "Absence or delay incident record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique incident ID", "maxLength": 128 },
+        "employeeId": { "type": "string", "description": "Target employee ID", "maxLength": 128 },
+        "type": { "type": "string", "description": "Incident category", "enum": ["absence", "delay"], "maxLength": 32 },
+        "date": { "type": "string", "description": "Date of incident (YYYY-MM-DD)", "maxLength": 32 },
+        "delayDurationMinutes": { "type": "number", "description": "Delay duration in minutes" },
+        "arrivalTime": { "type": "string", "description": "Arrival time (HH:mm)", "maxLength": 16 },
+        "reasonAr": { "type": "string", "description": "Recorded reason or notes", "maxLength": 500 },
+        "isExcused": { "type": "boolean", "description": "Whether approved as excused" },
+        "recordedBy": { "type": "string", "description": "Creator user account ID", "maxLength": 128 },
+        "createdAt": { "type": "string", "description": "Creation timestamp", "maxLength": 64 }
+      },
+      "required": ["employeeId", "type", "date"]
+    },
+    "EmployeeRequest": {
+      "title": "EmployeeRequest",
+      "description": "Employee self-service submission",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique request ID", "maxLength": 128 },
+        "employeeId": { "type": "string", "description": "Requester employee ID", "maxLength": 128 },
+        "type": { "type": "string", "description": "Type of request", "enum": ["absence", "delay", "vacation", "early_departure"], "maxLength": 32 },
+        "status": { "type": "string", "description": "Approval workflow status", "enum": ["pending", "approved", "rejected"], "maxLength": 32 },
+        "startDate": { "type": "string", "description": "Start date", "maxLength": 32 },
+        "endDate": { "type": "string", "description": "End date", "maxLength": 32 },
+        "exitTime": { "type": "string", "description": "Early departure time", "maxLength": 16 },
+        "delayDurationMinutes": { "type": "number", "description": "Expected delay in minutes" },
+        "vacationType": { "type": "string", "description": "Sub-type for leave", "maxLength": 32 },
+        "reasonAr": { "type": "string", "description": "Explanation reason", "maxLength": 500 },
+        "reviewerNotes": { "type": "string", "description": "Decision notes from reviewer", "maxLength": 500 },
+        "reviewedBy": { "type": "string", "description": "User ID of reviewer", "maxLength": 128 },
+        "createdAt": { "type": "string", "description": "Creation timestamp", "maxLength": 64 }
+      },
+      "required": ["employeeId", "type", "status", "reasonAr"]
+    },
+    "EnterpriseTask": {
+      "title": "EnterpriseTask",
+      "description": "Organizational task assignment",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Task identifier", "maxLength": 128 },
+        "titleAr": { "type": "string", "description": "Task headline in Arabic", "maxLength": 200 },
+        "descriptionAr": { "type": "string", "description": "Detailed task instructions", "maxLength": 1000 },
+        "priority": { "type": "string", "description": "Urgency rating", "enum": ["low", "medium", "high", "urgent"], "maxLength": 32 },
+        "dueDate": { "type": "string", "description": "Deadline timestamp or date", "maxLength": 32 },
+        "status": { "type": "string", "description": "Lifecycle state", "enum": ["active", "completed", "archived"], "maxLength": 32 },
+        "targetRoles": { "type": "string", "description": "JSON serialized roles target", "maxLength": 256 },
+        "targetBranchIds": { "type": "string", "description": "JSON serialized target branches", "maxLength": 512 },
+        "targetUsers": { "type": "string", "description": "JSON serialized assigned users list", "maxLength": 4096 },
+        "createdBy": { "type": "string", "description": "Author user ID", "maxLength": 128 },
+        "createdAt": { "type": "string", "description": "Creation timestamp", "maxLength": 64 }
+      },
+      "required": ["titleAr", "priority", "dueDate"]
+    },
+    "ItemCategory": {
+      "title": "ItemCategory",
+      "description": "Top-level catalog category",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Category ID", "maxLength": 128 },
+        "code": { "type": "string", "description": "Category code", "maxLength": 32 },
+        "nameAr": { "type": "string", "description": "Category name in Arabic", "maxLength": 128 },
+        "nameEn": { "type": "string", "description": "Category name in English", "maxLength": 128 },
+        "descriptionAr": { "type": "string", "description": "Category description", "maxLength": 256 }
+      },
+      "required": ["code", "nameAr"]
+    },
+    "MainSection": {
+      "title": "MainSection",
+      "description": "Secondary level catalog main section",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Main section ID", "maxLength": 128 },
+        "categoryId": { "type": "string", "description": "Parent category ID", "maxLength": 128 },
+        "code": { "type": "string", "description": "Main section code", "maxLength": 32 },
+        "nameAr": { "type": "string", "description": "Arabic label", "maxLength": 128 },
+        "nameEn": { "type": "string", "description": "English label", "maxLength": 128 },
+        "descriptionAr": { "type": "string", "description": "Description", "maxLength": 256 }
+      },
+      "required": ["categoryId", "code", "nameAr"]
+    },
+    "SubSection": {
+      "title": "SubSection",
+      "description": "Third tier catalog sub section",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Sub section ID", "maxLength": 128 },
+        "mainSectionId": { "type": "string", "description": "Parent main section ID", "maxLength": 128 },
+        "code": { "type": "string", "description": "Sub section code", "maxLength": 32 },
+        "nameAr": { "type": "string", "description": "Arabic label", "maxLength": 128 },
+        "nameEn": { "type": "string", "description": "English label", "maxLength": 128 },
+        "descriptionAr": { "type": "string", "description": "Description", "maxLength": 256 }
+      },
+      "required": ["mainSectionId", "code", "nameAr"]
+    },
+    "CatalogItem": {
+      "title": "CatalogItem",
+      "description": "Stock item with multi-branch quantities",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Item document ID", "maxLength": 128 },
+        "code": { "type": "string", "description": "Item SKU or barcode", "maxLength": 64 },
+        "nameAr": { "type": "string", "description": "Item name in Arabic", "maxLength": 200 },
+        "nameEn": { "type": "string", "description": "Item name in English", "maxLength": 200 },
+        "basePrice": { "type": "number", "description": "Unit base sales or purchase price" },
+        "categoryId": { "type": "string", "description": "Linked category ID", "maxLength": 128 },
+        "mainSectionId": { "type": "string", "description": "Linked main section ID", "maxLength": 128 },
+        "subSectionId": { "type": "string", "description": "Linked sub-section ID", "maxLength": 128 },
+        "unit": { "type": "string", "description": "Unit of measurement", "maxLength": 32 },
+        "branchStock": { "type": "string", "description": "JSON map of branchId to quantity number", "maxLength": 2048 },
+        "minAlertQuantity": { "type": "number", "description": "Low stock alert threshold" },
+        "imageUrl": { "type": "string", "description": "Item image or placeholder URL", "maxLength": 512 },
+        "createdAt": { "type": "string", "description": "Creation date", "maxLength": 64 }
+      },
+      "required": ["code", "nameAr", "basePrice", "categoryId", "mainSectionId", "subSectionId"]
+    },
+    "PurchaseOrder": {
+      "title": "PurchaseOrder",
+      "description": "Procurement and branch stock transfer request",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Order ID", "maxLength": 128 },
+        "orderNumber": { "type": "string", "description": "Formatted order number", "maxLength": 64 },
+        "itemId": { "type": "string", "description": "Ordered item ID", "maxLength": 128 },
+        "quantity": { "type": "number", "description": "Quantity requested" },
+        "unitPrice": { "type": "number", "description": "Item unit price" },
+        "totalAmount": { "type": "number", "description": "Total order amount" },
+        "sourceBranchId": { "type": "string", "description": "Source inventory branch ID", "maxLength": 128 },
+        "targetBranchId": { "type": "string", "description": "Target requesting branch ID", "maxLength": 128 },
+        "status": { "type": "string", "description": "Status of the order", "enum": ["pending", "approved", "fulfilled", "cancelled"], "maxLength": 32 },
+        "requestedBy": { "type": "string", "description": "User account ID", "maxLength": 128 },
+        "notesAr": { "type": "string", "description": "Additional order comments", "maxLength": 500 },
+        "createdAt": { "type": "string", "description": "Order creation date", "maxLength": 64 }
+      },
+      "required": ["orderNumber", "itemId", "quantity", "sourceBranchId", "status"]
+    },
+    "SystemSetting": {
+      "title": "SystemSetting",
+      "description": "System configuration setting",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Setting key ID", "maxLength": 128 },
+        "value": { "type": "string", "description": "Serialized configuration value", "maxLength": 8192 },
+        "updatedAt": { "type": "string", "description": "Last update timestamp", "maxLength": 64 }
+      },
+      "required": ["id", "value"]
+    },
+    "BranchTransfer": {
+      "title": "BranchTransfer",
+      "description": "حركة النقل والطرود بين الفروع مع تتبع أوقات الإنشاء واستلام النقل والفرع ومطابقة الطرود",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Document ID", "maxLength": 128 },
+        "trackingNumber": { "type": "string", "description": "رقم الرحلة / الشحنة", "maxLength": 64 },
+        "originBranchId": { "type": "string", "description": "الفرع المنقول منه", "maxLength": 128 },
+        "originBranchNameAr": { "type": "string", "description": "اسم الفرع المنقول منه", "maxLength": 128 },
+        "destinationBranchId": { "type": "string", "description": "الفرع المنقول له", "maxLength": 128 },
+        "destinationBranchNameAr": { "type": "string", "description": "اسم الفرع المنقول له", "maxLength": 128 },
+        "sentPackages": { "type": "number", "description": "عدد الطرود المرسلة" },
+        "receivedPackages": { "type": "number", "description": "عدد الطرود المستلمة فعلياً" },
+        "deficitPackages": { "type": "number", "description": "مقدار العجز في الطرود" },
+        "packageDescriptionAr": { "type": "string", "description": "وصف محتويات الشحنة والطرود", "maxLength": 500 },
+        "notesAr": { "type": "string", "description": "ملاحظات الشحنة", "maxLength": 500 },
+        "status": { "type": "string", "description": "حالة النقل والطرود", "enum": ["pending_pickup", "in_transit", "delivered", "delivered_with_deficit"], "maxLength": 64 },
+        "createdAt": { "type": "string", "description": "توقيت وتاريخ الإنشاء", "maxLength": 64 },
+        "createdByUserId": { "type": "string", "description": "معرف المستخدم المنشئ", "maxLength": 128 },
+        "createdByNameAr": { "type": "string", "description": "اسم منشئ النقل", "maxLength": 128 },
+        "pickedUpAt": { "type": "string", "description": "توقيت وتاريخ استلام مسؤول النقل", "maxLength": 64 },
+        "pickedUpByUserId": { "type": "string", "description": "معرف مسؤول النقل", "maxLength": 128 },
+        "pickedUpByNameAr": { "type": "string", "description": "اسم مسؤول النقل", "maxLength": 128 },
+        "logisticsNotesAr": { "type": "string", "description": "ملاحظات مسؤول النقل والشحن", "maxLength": 500 },
+        "receivedAt": { "type": "string", "description": "توقيت وتاريخ استلام الفرع", "maxLength": 64 },
+        "receivedByUserId": { "type": "string", "description": "معرف مستلم الفرع", "maxLength": 128 },
+        "receivedByNameAr": { "type": "string", "description": "اسم مستلم الفرع", "maxLength": 128 },
+        "receiptNotesAr": { "type": "string", "description": "ملاحظات الاستلام ومحضر الجرد", "maxLength": 500 },
+        "hasDeficit": { "type": "boolean", "description": "هل يوجد عجز في عدد الطرود" },
+        "deficitReportedToHrAndAdmin": { "type": "boolean", "description": "تم إشعار الموارد البشرية ومدير النظام" }
+      },
+      "required": ["trackingNumber", "originBranchId", "destinationBranchId", "sentPackages", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/employees/{employeeId}": { "schema": "Employee", "description": "سجلات الموظفين" },
+    "/branches/{branchId}": { "schema": "Branch", "description": "فروع الشركة" },
+    "/shifts/{shiftId}": { "schema": "Shift", "description": "إعدادات الورديات" },
+    "/employmentStatuses/{statusId}": { "schema": "EmploymentStatus", "description": "الأوضاع الوظيفية" },
+    "/users/{userId}": { "schema": "UserAccount", "description": "حسابات المستخدمين والصلاحيات" },
+    "/incidents/{incidentId}": { "schema": "IncidentRecord", "description": "سجلات الغياب والتأخير" },
+    "/requests/{requestId}": { "schema": "EmployeeRequest", "description": "طلبات الموظفين والخدمة الذاتية" },
+    "/tasks/{taskId}": { "schema": "EnterpriseTask", "description": "المهام الإدارية والتكليفات" },
+    "/categories/{categoryId}": { "schema": "ItemCategory", "description": "فئات الأصناف" },
+    "/mainSections/{sectionId}": { "schema": "MainSection", "description": "الأقسام الرئيسية للأصناف" },
+    "/subSections/{subSectionId}": { "schema": "SubSection", "description": "الأقسام الفرعية للأصناف" },
+    "/catalogItems/{itemId}": { "schema": "CatalogItem", "description": "أصناف الكتالوج والمخزون" },
+    "/purchaseOrders/{orderId}": { "schema": "PurchaseOrder", "description": "طلبات الشراء وتوريد الفروع" },
+    "/systemSettings/{settingId}": { "schema": "SystemSetting", "description": "إعدادات النظام العامة والصلاحيات" },
+    "/branchTransfers/{transferId}": { "schema": "BranchTransfer", "description": "سجلات وحركات النقل والطرود بين الفروع" }
+  }
+}

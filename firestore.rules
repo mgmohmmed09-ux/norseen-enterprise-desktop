@@ -1,0 +1,122 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    // Connection verification document
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+
+    // Employees Collection
+    match /employees/{employeeId} {
+      allow read: if true;
+      allow write: if isValidId(employeeId);
+    }
+
+    // Branches Collection
+    match /branches/{branchId} {
+      allow read: if true;
+      allow write: if isValidId(branchId);
+    }
+
+    // Shifts Collection
+    match /shifts/{shiftId} {
+      allow read: if true;
+      allow write: if isValidId(shiftId);
+    }
+
+    // Employment Statuses Collection
+    match /employmentStatuses/{statusId} {
+      allow read: if true;
+      allow write: if isValidId(statusId);
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isValidId(userId);
+    }
+
+    // Incidents Collection
+    match /incidents/{incidentId} {
+      allow read: if true;
+      allow write: if isValidId(incidentId);
+    }
+
+    // Requests Collection
+    match /requests/{requestId} {
+      allow read: if true;
+      allow write: if isValidId(requestId);
+    }
+
+    // Tasks Collection
+    match /tasks/{taskId} {
+      allow read: if true;
+      allow write: if isValidId(taskId);
+    }
+
+    // Categories Collection (3-Tier)
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isValidId(categoryId);
+    }
+
+    // Main Sections Collection (3-Tier)
+    match /mainSections/{sectionId} {
+      allow read: if true;
+      allow write: if isValidId(sectionId);
+    }
+
+    // Sub Sections Collection (3-Tier)
+    match /subSections/{subSectionId} {
+      allow read: if true;
+      allow write: if isValidId(subSectionId);
+    }
+
+    // Catalog Items & Inventory
+    match /catalogItems/{itemId} {
+      allow read: if true;
+      allow write: if isValidId(itemId);
+    }
+
+    // Purchase Orders
+    match /purchaseOrders/{orderId} {
+      allow read: if true;
+      allow write: if isValidId(orderId);
+    }
+
+    // Weekly Reports
+    match /weeklyReports/{reportId} {
+      allow read: if true;
+      allow write: if isValidId(reportId);
+    }
+
+    // Casual / Contingent Labor Collection
+    match /contingentEmployees/{contingentId} {
+      allow read: if true;
+      allow write: if isValidId(contingentId);
+    }
+
+    // System Settings
+    match /systemSettings/{settingId} {
+      allow read: if true;
+      allow write: if isValidId(settingId);
+    }
+
+    // Inter-Branch Logistics & Transfers
+    match /branchTransfers/{transferId} {
+      allow read: if true;
+      allow write: if isValidId(transferId);
+    }
+
+    // Default deny all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
