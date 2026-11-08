@@ -26,3 +26,15 @@ View your app in AI Studio: https://ai.studio/apps/1fd8b7fd-0258-433f-9d97-404f4
 3. أنشئ ملف التثبيت: `npm run dist`.
 
 سيتم إنشاء ملف Setup بصيغة `.exe` داخل مجلد `release`. يمكن نقل هذا الملف إلى جهاز Windows آخر وتثبيته، كما سيتم إنشاء اختصار باسم `Norseen` على سطح المكتب.
+
+## التحديث التلقائي من GitHub
+
+تم ربط التحديثات بالمستودع `mgmohmmed09-ux/norseen-enterprise-desktop`. النسخة المثبتة تفحص GitHub Releases عند التشغيل، وتحمل الإصدار الجديد تلقائيًا عند توفره.
+
+لنشر إصدار جديد:
+
+1. غيّر رقم `version` في `package.json`، مثل `1.0.2`.
+2. أنشئ commit وارفعه إلى GitHub.
+3. أنشئ وادفع tag يبدأ بالحرف `v`، مثل `v1.0.2`.
+
+سيقوم GitHub Actions ببناء ملف Setup ورفعه إلى GitHub Releases تلقائيًا. يجب تثبيت النسخة الحالية مرة واحدة حتى تحتوي على نظام التحديث التلقائي.
